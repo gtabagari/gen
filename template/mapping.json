@@ -5,7 +5,7 @@
       "go_type": "bool",
       "json_type": "Boolean",
       "protobuf_type": "bool",
-      "guregu_type": "null.Int",
+      "guregu_type": "null.Bool",
       "go_nullable_type": "sql.NullBool",
       "swagger_type": "bool"
     },

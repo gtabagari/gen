@@ -726,6 +726,8 @@ func LoadTableInfo(db *sql.DB, dbTables []string, excludeDbTables []string, conf
 		modelInfo.IndexPlus1 = tableIdx + 1
 		tableIdx++
 
+		tableName = strings.Replace(tableName, ".", "", 1)
+
 		tableInfos[tableName] = modelInfo
 	}
 

@@ -37,11 +37,19 @@ type CrudAPI struct {
 
 
 // PagedResults results for pages GetAll results.
+//type PagedResults struct {
+//	Page         int64       `json:"page"`
+//	PageSize     int64       `json:"page_size"`
+//	Data         interface{} `json:"data"`
+//	TotalRecords int         `json:"total_records"`
+//}
+
+//Tabagari
 type PagedResults struct {
-	Page         int64       {{ .Config.JSONTag "page" }}
-	PageSize     int64       {{ .Config.JSONTag "page_size" }}
-	Data         interface{} {{ .Config.JSONTag "data" }}
-    TotalRecords int         {{ .Config.JSONTag "total_records" }}
+	Page         int       `json:"page"`
+	PageSize     int       `json:"page_size"`
+	Data         interface{} `json:"data"`
+	TotalRecords int64         `json:"total_records"`
 }
 
 // HTTPError example
@@ -118,13 +126,23 @@ var ContextInitializer ContextInitializerFunc
 
 
 
-func readInt(r *http.Request, param string, v int64) (int64, error) {
+//func readInt(r *http.Request, param string, v int64) (int64, error) {
+//	p := r.FormValue(param)
+//	if p == "" {
+//		return v, nil
+//	}
+//
+//	return strconv.ParseInt(p, 10, 64)
+//}
+
+//Tabagari
+func readInt(r *http.Request, param string, v int) (int, error) {
 	p := r.FormValue(param)
 	if p == "" {
 		return v, nil
 	}
 
-	return strconv.ParseInt(p, 10, 64)
+	return strconv.Atoi(p)
 }
 
 func writeJSON(ctx context.Context, w http.ResponseWriter, v interface{}) {

@@ -137,7 +137,7 @@ func msSQLloadFromSysColumns(db *sql.DB, tableName string) (colInfo map[string]*
 	identitySQL := fmt.Sprintf(`
 SELECT name, is_identity, is_nullable, max_length 
 FROM sys.columns 
-WHERE  object_id = object_id('dbo.%s')`, tableName)
+WHERE  object_id = object_id('%s')`, tableName)
 
 	res, err := db.Query(identitySQL)
 	if err != nil {

@@ -1,5 +1,5 @@
 {{define "dao_sqlx_getall.go.tmpl"}}
-// GetAll{{.StructName}} is a function to get a slice of record(s) from {{.TableName}} table in the {{.DatabaseName}} database
+// GetAll{{.StructName}} is a function to get a slice of record(s) from {{.TableInfo.TableName}} table in the {{.DatabaseName}} database
 // params - page     - page requested (defaults to 0)
 // params - pagesize - number of records in a page  (defaults to 20)
 // params - order    - db sort order column
@@ -35,7 +35,7 @@ func GetAll{{.StructName}}(ctx context.Context, page, pagesize int64, order stri
 		return nil, -1, err
 	}
 
-	cnt , err := GetRowCount(ctx, "{{.TableName}}")
+	cnt , err := GetRowCount(ctx, "{{.TableInfo.TableName}}")
 	if err != nil {
 		return results, -2, err
 	}

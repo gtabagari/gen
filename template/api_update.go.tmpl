@@ -1,7 +1,7 @@
 {{define "api_update.go.tmpl"}}
-// Update{{.StructName}} Update a single record from {{.TableName}} table in the {{.DatabaseName}} database
-// @Summary Update an record in table {{.TableName}}
-// @Description Update a single record from {{.TableName}} table in the {{.DatabaseName}} database
+// Update{{.StructName}} Update a single record from {{.TableInfo.TableName}} table in the {{.DatabaseName}} database
+// @Summary Update an record in table {{.TableInfo.TableName}}
+// @Description Update a single record from {{.TableInfo.TableName}} table in the {{.DatabaseName}} database
 // @Tags {{.StructName}}
 // @Accept  json
 // @Produce  json
@@ -30,9 +30,9 @@ func Update{{.StructName}}(w http.ResponseWriter, r *http.Request, ps httprouter
 		return
 	}
 
-   if err := {{.StructName | toLower}}.BeforeSave(); err != nil {
-      returnError(ctx, w, r, {{.daoPackageName}}.ErrBadParams)
-   }
+//   if err := {{.StructName | toLower}}.BeforeSave(); err != nil {
+//      returnError(ctx, w, r, {{.daoPackageName}}.ErrBadParams)
+//   }
 
    {{.StructName | toLower}}.Prepare()
 
@@ -41,7 +41,7 @@ func Update{{.StructName}}(w http.ResponseWriter, r *http.Request, ps httprouter
       return
    }
 
-	if err := ValidateRequest(ctx, r, "{{.TableName}}", {{.modelPackageName}}.Update); err != nil{
+	if err := ValidateRequest(ctx, r, "{{.TableInfo.TableName}}", {{.modelPackageName}}.Update); err != nil{
 		returnError(ctx, w, r, err)
 		return
 	}

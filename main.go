@@ -276,6 +276,8 @@ func main() {
 	fmt.Printf("Generating code for the following tables (%d)\n", len(tableInfos))
 	i := 0
 	for tableName := range tableInfos {
+		//tableInfos[tableName].TableName = strings.Replace(tableName,".","",1)
+		//tableInfos[tableName].StructName = strings.Replace(tableName,".","",1)
 		fmt.Printf("[%d] %s\n", i, tableName)
 		i++
 	}
@@ -575,11 +577,11 @@ func generate(conf *dbmeta.Config) error {
 	*xmlNameFormat = strings.ToLower(*xmlNameFormat)
 
 	// generate go files for each table
-	for tableName, tableInfo := range tableInfos {
+	for _, tableInfo := range tableInfos {
 
 		if len(tableInfo.Fields) == 0 {
 			if *verbose {
-				fmt.Printf("[%d] Table: %s - No Fields Available\n", tableInfo.Index, tableName)
+				fmt.Printf("[%d] Table: %s - No Fields Available\n", tableInfo.Index, tableInfo.TableName)
 			}
 
 			continue
@@ -587,7 +589,11 @@ func generate(conf *dbmeta.Config) error {
 
 		modelInfo := conf.CreateContextForTableFile(tableInfo)
 
-		modelFile := filepath.Join(modelDir, CreateGoSrcFileName(tableName))
+		tableName := strings.ReplaceAll(tableInfo.TableName, ".", "")
+		filename := strings.Replace(tableInfo.TableName, ".", "_", 1)
+		modelFile := filepath.Join(modelDir, CreateGoSrcFileName(filename))
+
+		modelInfo["TableName"] = tableName
 		err = conf.WriteTemplate(ModelTmpl, modelInfo, modelFile)
 		if err != nil {
 			fmt.Print(au.Red(fmt.Sprintf("Error writing file: %v\n", err)))
@@ -1124,7 +1130,7 @@ func WriteNewFile(fpath string, in io.Reader) error {
 // CreateGoSrcFileName ensures name doesnt clash with go naming conventions like _test.go
 func CreateGoSrcFileName(tableName string) string {
 	name := dbmeta.Replace(*fileNamingTemplate, tableName)
-	// name := inflection.Singular(tableName)
+	//name := inflection.Singular(tableName)
 
 	if strings.HasSuffix(name, "_test") {
 		name = name[0 : len(name)-5]
